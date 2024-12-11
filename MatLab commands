@@ -1,0 +1,34 @@
+clc;clear;
+
+serialPort = "COM5"; 
+baudRate = 115200;
+
+
+device = serialport(serialPort, baudRate);
+
+device.Timeout = 10; 
+configureTerminator(device, "LF"); % newline character
+
+pause(2); 
+
+while true
+       try
+            dataLine = readline(device);
+            disp(dataLine);
+        catch ME
+            disp("Error reading data:");
+            disp(ME.message);
+        end
+    userCommand = input('Enter command (or press Enter to skip): ', 's');
+
+        if strcmpi(userCommand, 'EXIT')
+            disp("Exiting...");
+            break;
+        elseif ~isempty(userCommand)
+            
+            writeline(device, userCommand);
+           
+        end
+
+end
+clear device;
